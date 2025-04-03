@@ -1,211 +1,177 @@
-以下に、`project_structure.md` に「提供機能」セクションを追加し、画面構成と参照画像に関する情報を盛り込んだ更新版を示します。これにより、技術的なディレクトリ構造とUI設計の関連性が明確になります。
 
 ---
+name: "docs/overview_0/project-structure.md"
+title: "プロジェクト構造概要 (Project Structure)"
+description: "[プロジェクト名] - ディレクトリ構成など"
+---
 
-```markdown
-# プロジェクト構造概要 (Project Structure)
+# docs/overview_0/project-structure.md
 
 ## 1. ディレクトリ構成
 
-以下は、**Bookmarkly**アプリケーションの基本的なディレクトリ構成です。シンプルな構成にして、初心者でも理解しやすいようにしています。
+以下は、[プロジェクト名] アプリケーションの基本的なディレクトリ構成です。
 
-```
-app/
-├── controllers/         # コントローラー（Railsアプリのロジック）
-│   ├── bookmarks_controller.rb
-│   ├── sessions_controller.rb
-│   └── users_controller.rb
-├── models/              # モデル（データベースとのやりとり）
-│   ├── bookmark.rb
-│   ├── user.rb
-│   └── tag.rb
-├── views/               # ビュー（ユーザーに表示される画面）
-│   ├── bookmarks/       # ブックマーク関連のビュー
-│   ├── sessions/        # ログイン・登録関連のビュー
-│   └── users/           # ユーザー関連のビュー
-├── helpers/             # ビューで使うヘルパーメソッド
-│   └── application_helper.rb
-├── assets/              # スタイルシート、JavaScript、画像など
-│   ├── stylesheets/
-│   ├── javascripts/
-│   └── images/
-├── config/              # 設定ファイル
-│   ├── routes.rb        # アプリケーションのルーティング設定
-│   └── database.yml     # データベース接続設定
-├── db/                  # データベース関連
-│   ├── migrate/         # マイグレーションファイル
-│   └── schema.rb        # データベースのスキーマ
-├── lib/                 # ユーティリティ関数や外部APIとの連携
-├── public/              # 公開される静的ファイル
-├── test/                # テストファイル（RSpecなど）
-│   ├── controllers/
-│   ├── models/
-│   └── integration/
-├── config.ru            # Rack設定ファイル
-├── Gemfile              # 使用するgemのリスト
-└── README.md            # プロジェクトの説明ファイル
-```
+[プロジェクトルート]/
+├── public/ # 静的ファイル (画像, faviconなど)
+├── src/ # ソースコード
+│ ├── app/ # (Next.jsの場合) メインのアプリケーションロジック, API Routes
+│ │ ├── (page1)/ # 各ページのディレクトリ
+│ │ │ ├── page.tsx # ページコンポーネント
+│ │ │ └── ...
+│ │ ├── (page2)/
+│ │ │ ├── page.tsx
+│ │ │ └── ...
+│ │ ├── api/ # API Routes
+│ │ │ ├── (route1)/
+│ │ │ │ └── route.ts
+│ │ │ └── (route2)/
+│ │ │ └── route.ts
+│ │ ├── layout.tsx # 共通レイアウト
+│ │ └── ...
+│ ├── components/ # 再利用可能なコンポーネント
+│ │ ├── (Component1)/
+│ │ │ ├── index.tsx # コンポーネント
+│ │ │ ├── styles.module.css # スタイル (CSS Modulesの場合)
+│ │ │ └── [Component1].test.tsx # テスト (必要に応じて)
+│ │ ├── (Component2)/
+│ │ │ └── ...
+│ │ └── ...
+│ ├── lib/ # ユーティリティ関数、APIクライアントなど
+│ │ ├── (module1).ts
+│ │ ├── (module2).ts
+│ │ └── ...
+│ ├── styles/ # グローバルスタイル、テーマなど
+│ │ ├── globals.css
+│ │ ├── variables.css # CSS変数 (必要に応じて)
+│ │ └── ...
+│ ├── types/ # TypeScriptの型定義 (必要に応じて)
+│ │ ├── (type1).ts
+│ │ └── ...
+│ └── ...
+├── .env # 環境変数ファイル
+├── .eslintrc.js # ESLintの設定ファイル
+├── .gitignore # Gitの除外ファイル
+├── .prettierrc.js # Prettierの設定ファイル (必要に応じて)
+├── next.config.js # Next.jsの設定ファイル (Next.jsの場合)
+├── package.json # プロジェクトの依存関係、スクリプトなど
+├── README.md # プロジェクトの説明
+├── tsconfig.json # TypeScriptの設定ファイル
+└── [その他設定ファイル]
 
----
+**補足:**
 
-## 2. 主要ファイルの役割
-
-### 2.1. `app/controllers/`
-- **bookmarks_controller.rb**  
-  - ブックマークのCRUD（作成、読み取り、更新、削除）処理を担当。
-  - ユーザーがブックマークを登録したり、検索したり、削除したりするロジックを実装します。
-
-- **sessions_controller.rb**  
-  - ログイン機能を実装します。ユーザーがログイン、ログアウトするための処理を記述。
-
-- **users_controller.rb**  
-  - ユーザーの登録・更新・削除・プロフィール管理などを担当します。
-
-### 2.2. `app/models/`
-- **bookmark.rb**  
-  - ブックマークのデータモデル。`title`（タイトル）、`url`（URL）、`description`（概要）、`tags`（タグ）などを格納します。
-
-- **user.rb**  
-  - ユーザーのデータモデル。`email`（メールアドレス）、`password_digest`（パスワードのハッシュ）、`name`（名前）などを格納します。Deviseで認証を管理。
-
-- **tag.rb**  
-  - タグモデル。各ブックマークにタグを付け、検索機能で使用します。
-
-### 2.3. `app/views/`
-- **bookmarks/**  
-  - ブックマーク関連のビュー（フォーム、一覧表示など）を管理。
-
-- **sessions/**  
-  - ログイン、登録、パスワードリセットなどの画面ビュー。
-
-- **users/**  
-  - ユーザーのプロフィールページや設定画面など。
-
-### 2.4. `config/routes.rb`
-- アプリケーションのルーティング設定。どのURLにアクセスした際に、どのコントローラー・アクションを呼び出すかを定義。
-
-```ruby
-Rails.application.routes.draw do
-  root 'bookmarks#index'
-  resources :bookmarks
-  resource :session, only: [:new, :create, :destroy]
-  resources :users, only: [:new, :create, :show, :edit, :update]
-end
-```
-
-### 2.5. `db/migrate/`
-- **マイグレーションファイル**は、データベースのスキーマを管理します。例えば、`create_bookmarks.rb` というファイルでブックマークテーブルを作成します。
-
-### 2.6. `test/`
-- **RSpecテスト**  
-  - コントローラー、モデル、統合テストなどを行います。正常系テストと異常系テストをカバーし、アプリケーションの動作が正しいかを確認します。
-
-### 2.7. `Gemfile`
-- このファイルでは、プロジェクトで使用するgem（ライブラリ）を管理します。Devise（認証）、RSpec（テスト）、その他の便利なライブラリを追加します。
-
-```ruby
-gem 'rails', '6.1.4'
-gem 'devise'
-gem 'rspec-rails'
-gem 'pg'  # PostgreSQLのデータベースを使用
-```
-
-### 2.8. `README.md`
-- プロジェクトの概要、セットアップ方法、使い方などを記載するファイルです。ポートフォリオにおいて、外部の人がプロジェクトを理解しやすいように説明します。
+*   上記はNext.jsをベースにした例です。Create React Appなど、他のフレームワーク/構成の場合は適宜変更してください。
+*   `src/` 以下は、プロジェクトの規模や好みに応じてさらに細分化しても構いません。
+*   状態管理ライブラリ (Redux, Zustandなど) を使用する場合は、`src/store` などのディレクトリを追加することがあります。
+*   テストファイルは、コンポーネントと同じディレクトリに置くか、`src/__tests__/` などのディレクトリにまとめて置くことができます。
 
 ---
 
-## 3. 提供機能
+## 2. 主要ファイル/ディレクトリの役割
 
-### 3.1 画面構成と参照画像
+### 2.1. `src/app/` (Next.jsの場合)
 
-#### 3.1.1 ログイン関連画面
+*   **`(page)/page.tsx`**: 各ページのコンポーネント。
+*   **`api/`**: API Routes。サーバーレス関数として動作するAPIエンドポイントを定義します。
+*   **`layout.tsx`**: アプリケーション全体の共通レイアウト。
 
-- **ログイン画面**
-    - **概要**: 登録済みユーザーがメールアドレスとパスワードでログイン
-    - **ページの定義**: `ui_definition/pages/login.yml`
-    - **参考画像**: `ui_definition/images/login.png`
-    - **詳細**:
-        - 入力フィールド（メールアドレス、パスワード）
-        - 「ログイン」ボタン
-        - 新規登録やパスワードリセットリンク
+### 2.2. `src/components/`
 
-- **登録画面**
-    - **概要**: 新規ユーザーがアカウント作成
-    - **ページの定義**: `ui_definition/pages/signup.yml`
-    - **参考画像**: `ui_definition/images/signup.png`
-    - **詳細**:
-        - 名前、メールアドレス、パスワード、確認用パスワードの入力欄
-        - 「登録」ボタン
-        - ログイン画面へのリンク
+*   **`(Component)/index.tsx`**: 再利用可能なUIコンポーネント。
+*   **`(Component)/styles.module.css`**: コンポーネントのスタイル (CSS Modulesを使用する場合)。
+*   **`(Component)/[Component].test.tsx`**: コンポーネントのテスト (任意)。
 
-- **パスワードリセット画面**
-    - **概要**: パスワードを忘れたユーザーがリセット手続きを進める
-    - **ページの定義**: `ui_definition/pages/reset_password.yml`
-    - **参考画像**: `ui_definition/images/reset_password.png`
-    - **詳細**:
-        - 登録済みメールアドレスの入力欄
-        - 「パスワードリセットメールを送信」ボタン
-        - ログイン画面へのリンク
+### 2.3. `src/lib/`
 
-#### 3.1.2 ブックマーク管理画面
+*   **`(module).ts`**: ユーティリティ関数、APIクライアント、定数など、複数の場所で使われる可能性のあるコード。
 
-- **概要**: ブックマークの追加、編集、削除、および検索
-- **ページの定義**: `ui_definition/pages/manage_bookmarks.yml`
-- **参考画像**: `ui_definition/images/manage_bookmarks.png`
-- **詳細**:
-    - 左側に登録済みのブックマーク一覧（タイトル、URL、タグ、編集・削除ボタン）
-    - 右上に新規ブックマークの入力フォーム（URL、タイトル、タグ、追加ボタン）
-    - 右下にタグやキーワードで検索するためのフォーム
+### 2.4. `src/styles/`
 
-#### 3.1.3 マイページ画面
+*   **`globals.css`**: アプリケーション全体のグローバルスタイル。
+*   **`variables.css`**: CSS変数 (カスタムプロパティ) を定義 (任意)。
 
-- **概要**: ユーザーが自分のプロフィールを編集する画面
-- **ページの定義**: `ui_definition/pages/my_page.yml`
-- **参考画像**: `ui_definition/images/my_page.png`
-- **詳細**:
-    - 名前、メールアドレス、パスワード変更用の入力欄
-    - （パスワード変更時のみ）確認用パスワード入力欄
-    - 「プロフィールを更新」ボタン
+### 2.5. `src/types/` (任意)
+
+*   **`(type).ts`**: プロジェクト全体で共有するTypeScriptの型定義。
+
+### 2.6. `public/`
+
+*   静的ファイル (画像, favicon, robots.txtなど)。
+
+### 2.7. 設定ファイル
+
+*   **`.env`**: 環境変数。
+*   **`.eslintrc.js`**: ESLintの設定。コードの品質とスタイルをチェックします。
+*   **`.prettierrc.js`**: Prettierの設定 (任意)。コードの自動フォーマットを行います。
+*   **`next.config.js`**: Next.jsのカスタム設定 (Next.jsの場合)。
+*   **`tsconfig.json`**: TypeScriptのコンパイラ設定。
+
+### 2.8. `package.json`
+
+*   プロジェクトの依存関係 (dependencies, devDependencies) を管理します。
+*   開発用スクリプト (scripts) を定義します (例: `dev`, `build`, `start`, `test`)。
+
+### 2.9. `README.md`
+* プロジェクトの概要、セットアップ方法、使い方などを記載するファイルです。
 
 ---
 
-## 4. ルーティング
+## 3. ルーティング (Next.jsの場合)
 
-- **ログイン関連**
-  - `/login`: ログイン画面
-  - `/register`: ユーザー登録画面
-
-- **ブックマーク関連**
-  - `/bookmarks`: ブックマークの一覧ページ
-  - `/bookmarks/new`: 新しいブックマークを追加するフォーム
-  - `/bookmarks/:id`: 特定のブックマークの詳細ページ
-
-- **マイページ関連**
-  - `/mypage`: ユーザーのプロフィール管理画面
-
+-   **`/`**: ホーム
+-   **`/about`**: アプリについて
+-   **`/(page1)`**: [機能1]
+-   **`/(page2)`**: [機能2]
+-   **`/api/(route1)`**: [APIエンドポイント1]
+- **`/api/(route2)`**: [APIエンドポイント2]
+- **`/login`**: ログイン
 ---
 
-## 5. データベース設計
+## 4. データベース設計 (例)
 
-### `bookmarks` テーブル
+[データベース名]
+
+### `[テーブル名1]` テーブル
+
 | カラム       | 型         | 備考                     |
 |--------------|------------|--------------------------|
-| id           | bigint     | 自動採番                  |
-| title        | text       | ブックマークのタイトル    |
-| url          | text       | ブックマークのURL         |
-| description  | text       | ブックマークの概要       |
-| user_id      | uuid       | `users`テーブルの外部キー |
-| tags         | text[]     | タグ（配列として保存）     |
-| created_at   | timestamptz| 作成日時                 |
-| updated_at   | timestamptz| 更新日時                 |
+| id           | [型]     | [説明]                  |
+| [カラム名]        | [型]     | [説明]               |
+| [カラム名] | [型]   | [説明]     |
+| created_at   | [型]| 作成日時                 |
+| updated_at   | [型]| 更新日時                 |
 
-### `users` テーブル
+### `[テーブル名2]` テーブル
+
 | カラム        | 型       | 備考                         |
 |---------------|----------|------------------------------|
-| id            | uuid     | 自動生成                     |
-| email         | text     | メールアドレス               |
-| password_digest | text   | パスワードのハッシュ         |
-| name          | text     | ユーザー名                   |
-| created_at    | timestamptz | 作成日時                    |
-| updated_at    | timestamptz | 更新日時                    |
+| id            | [型]     | [説明]                    |
+| [カラム名]         | [型]     | [説明]               |
+| [カラム名]          | [型]   | [説明]         |
+| created_at    | [型] | 作成日時                    |
+| updated_at    | [型] | 更新日時                    |
+
+---
+
+## 5. 進捗管理とフィードバック
+
+-   **毎週進捗確認**: 定期的に進捗を確認し、遅れが生じた場合は計画を調整
+-   **コードレビュー**: メンターやオンラインコミュニティでフィードバックを受け、改善点を見つける
+
+---
+
+主な変更点:
+
+Next.jsベース: Next.jsを前提としたディレクトリ構成にしました (ただし、他のフレームワークでも参考になるように調整可能です)。
+
+コンポーネント指向: components/ ディレクトリを強調し、コンポーネントベースの開発を推奨する形にしました。
+
+型定義: TypeScriptの使用を前提とし、types/ ディレクトリを追加しました。
+
+設定ファイル: JavaScript/TypeScriptプロジェクトでよく使われる設定ファイル (.eslintrc.js, .prettierrc.js, tsconfig.json) を追加しました。
+
+API Routes: Next.jsのAPI Routesの概念を反映させました。
+
+データベース設計: テーブル定義の例を、より汎用的な形に修正しました。
+
+このテンプレートは、Next.js, React, その他のJavaScriptベースのフレームワークを使ったWebアプリケーション開発のプロジェクト構造のドキュメント作成に活用できます。
